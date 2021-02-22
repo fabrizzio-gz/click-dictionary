@@ -1,0 +1,16 @@
+{
+
+  "manifest_version": 2,
+  "name": "Click Dictionary",
+  "version": "1.0",
+
+  "description": "Get word definition when double clicking on it.",
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+
+}
