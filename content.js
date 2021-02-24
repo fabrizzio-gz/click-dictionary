@@ -1,16 +1,3 @@
-const root = document.documentElement;
-
-var myHeaders = new Headers();
-myHeaders.append("app_id", "some");
-myHeaders.append("app_key", "value");
-
-var myInit = {
-  method: "GET",
-  headers: myHeaders,
-  mode: "cors",
-  cache: "default",
-};
-
 async function getMeaning() {
   let response = await fetch(
     "https://api.dictionaryapi.dev/api/v2/entries/en_US/hello"
@@ -27,11 +14,9 @@ async function getMeaning() {
   console.log(definitions[0].definition);
 }
 
-document.addEventListener("dblclick", function myfunction() {
+document.addEventListener("dblclick", async function myfunction() {
   text = window.getSelection().toString();
-
-  if (text) {
-    alert(text);
-    getMeaning();
-  }
+  await getMeaning();
+  const message = document.querySelector("#dictMessage");
+  message.style.setProperty("--modal-visibility", "visible");
 });

@@ -1,0 +1,9 @@
+:root {
+  --modal-visibility: hidden;
+}
+
+#dictMessage {
+  /* position: fixed; */
+  background-color: rgb(255, 255, 255);
+  visibility: var(--modal-visibility);
+}
