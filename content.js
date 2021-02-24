@@ -15,8 +15,16 @@ async function getMeaning() {
 }
 
 document.addEventListener("dblclick", async function myfunction() {
-  text = window.getSelection().toString();
-  await getMeaning();
-  const message = document.querySelector("#dictMessage");
-  message.style.setProperty("--modal-visibility", "visible");
+  let text = window.getSelection();
+  let textPosition = text.getRangeAt(0).getBoundingClientRect();
+  console.log(textPosition);
+  let { bottom, right } = textPosition;
+  bottom = Math.round(bottom);
+  right = Math.round(right);
+  console.log("Positions are", bottom, right);
+  await getMeaning(text.toString());
+  const definition = document.getElementById("dictDefinition");
+  definition.style.setProperty("--position-x", right);
+  definition.style.setProperty("--position-y", bottom);
+  definition.style.setProperty("--modal-visibility", "visible");
 });
