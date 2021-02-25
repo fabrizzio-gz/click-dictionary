@@ -1,27 +1,30 @@
-const definition = document.getElementById("dict-definition");
+// const definition = document.getElementById("dict-definition");
 let visible = false;
 const defW = 250; //px
 const defH = 220; //px
 
 class Definition {
-  constructor() {
+  constructor(wordSearched) {
     this.definition = document.createElement("div");
+    this.definition.classList.add("dict-definition");
+
     this.closeButton = document.createElement("span");
+    this.closeButton.classList.add("close-button");
+    this.closeButton.insertAdjacentHTML("afterbegin", "&times");
+    this.closeButton.addEventListener("click", () => this.remove());
+
     this.dictWord = document.createElement("h2");
+    //    this.dictWord.appendChild(document.createTextNode("Test word"));
+
     this.dictMeaning = document.createElement("p");
-    const buttonText = document.createTextNode("&times;");
-    this.closeButton.appendChild(buttonText);
-    const wordTitle = document.createTextNode("Test word");
-    this.dictWord.appendChild(wordTitle);
-    /*
-    this.closeButton.appendChild(buttonText);
-    this.dictWord.createTextNode("Test word");
-    this.dictMeaning.createTextNode("This is the definition");
-    // .createTextNode("Tutorix is the best e-learning platform");
-*/
+    /*this.dictMeaning.appendChild(
+      document.createTextNode("A great definition.")
+    );*/
+
     this.definition.appendChild(this.closeButton);
     this.definition.appendChild(this.dictWord);
     this.definition.appendChild(this.dictMeaning);
+
     console.log("creating");
   }
 
@@ -31,14 +34,51 @@ class Definition {
   }
 
   remove() {
+    console.log("removing");
     this.definition.remove();
+  }
+
+  async writeDefinitionContent(wordSearched) {
+    try {
+      let response = await fetch(
+        `https://api.dictionaryapi.dev/api/v2/entries/en_US/${wordSearched}`
+      );
+      let body = await response.json();
+      body = body[0];
+      let { word, meanings } = body;
+      console.log(word);
+      let meaning = meanings[0];
+      let { partOfSpeech, definitions } = meaning;
+
+      // document.getElementById("dictWord").textContent = word;
+      this.dictWord.appendChild(document.createTextNode(word));
+      // document.getElementById("dictMeaning").textContent =
+      //  definitions[0].definition;
+      this.dictMeaning.appendChild(
+        document.createTextNode(definitions[0].definition)
+      );
+      console.log(partOfSpeech);
+      console.log(definitions[0].definition);
+    } catch (error) {
+      // document.getElementById("dictWord").textContent = wordSearched;
+      this.dictWord.appendChild(document.createTextNode(wordSearched));
+      // document.getElementById("dictMeaning").textContent = "No definitions found.";
+      this.dictMeaning.appendChild(
+        document.createTextNode("No definitions found.")
+      );
+    }
   }
 }
 
+/*
 const definitionObj = new Definition();
 definitionObj.add();
 
-/*
+const definitionObj2 = new Definition();
+definitionObj2.add();
+const definitionObj3 = new Definition();
+definitionObj3.add();*/
+
 const toggleVisibility = () => {
   if (visible) definition.style.setProperty("--modal-visibility", "hidden");
   else definition.style.setProperty("--modal-visibility", "visible");
@@ -97,13 +137,16 @@ document.addEventListener("dblclick", async function myfunction() {
   console.log(textPosition);
 
   text = text.toString();
+
   if (text) {
-    await getMeaning(text);
+    let definition = new Definition(text);
+    await definition.writeDefinitionContent(text);
+    definition.add();
+    /*await getMeaning(text);
     getPositionXY(textPosition, definition);
-    makeVisible();
+    makeVisible();*/
   }
 });
 
-const closeButton = document.getElementById("close-button");
-closeButton.addEventListener("click", toggleVisibility);
-*/
+// const closeButton = document.getElementById("close-button");
+// closeButton.addEventListener("click", toggleVisibility);

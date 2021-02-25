@@ -1,5 +1,5 @@
 :root {
-  --modal-visibility: hidden;
+  --modal-visibility: visible;
   --position-left: 0;
   --position-top: 0;
 }
