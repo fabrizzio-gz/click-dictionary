@@ -1,9 +1,14 @@
 // const definition = document.getElementById("dict-definition");
 let visible = false;
+/*
 const defW = 250; //px
 const defH = 220; //px
+*/
 
 class Definition {
+  static defW = 250; //px
+  static defH = 220; //px
+
   constructor(wordSearched) {
     this.definition = document.createElement("div");
     this.definition.classList.add("dict-definition");
@@ -14,28 +19,11 @@ class Definition {
     this.closeButton.addEventListener("click", () => this.remove());
 
     this.dictWord = document.createElement("h2");
-    //    this.dictWord.appendChild(document.createTextNode("Test word"));
-
     this.dictMeaning = document.createElement("p");
-    /*this.dictMeaning.appendChild(
-      document.createTextNode("A great definition.")
-    );*/
 
     this.definition.appendChild(this.closeButton);
     this.definition.appendChild(this.dictWord);
     this.definition.appendChild(this.dictMeaning);
-
-    console.log("creating");
-  }
-
-  add() {
-    console.log("adding");
-    document.body.appendChild(this.definition);
-  }
-
-  remove() {
-    console.log("removing");
-    this.definition.remove();
   }
 
   async writeDefinitionContent(wordSearched) {
@@ -67,6 +55,31 @@ class Definition {
         document.createTextNode("No definitions found.")
       );
     }
+  }
+
+  setPosition(textPosition) {
+    const { top, right, bottom, left } = textPosition;
+    const vw = document.documentElement.clientWidth;
+    const vh = document.documentElement.clientHeight;
+    console.log("Sizes: ", vw, vh);
+
+    this.definition.style.left =
+      (right + Definition.defW < vw ? right : left - Definition.defW) + "px";
+
+    this.definition.style.top =
+      (bottom + Definition.defH < vh
+        ? bottom
+        : top - this.definition.offsetHeight) + "px";
+  }
+
+  add() {
+    console.log("adding");
+    document.body.appendChild(this.definition);
+  }
+
+  remove() {
+    console.log("removing");
+    this.definition.remove();
   }
 }
 
@@ -133,15 +146,16 @@ async function getMeaning(wordSearched) {
 
 document.addEventListener("dblclick", async function myfunction() {
   let text = window.getSelection();
-  let textPosition = text.getRangeAt(0).getBoundingClientRect();
-  console.log(textPosition);
 
-  text = text.toString();
-
-  if (text) {
-    let definition = new Definition(text);
+  if (text.toString()) {
+    const textPosition = text.getRangeAt(0).getBoundingClientRect();
+    text = text.toString();
+    console.log(textPosition);
+    const definition = new Definition(text);
     await definition.writeDefinitionContent(text);
+    definition.setPosition(textPosition);
     definition.add();
+
     /*await getMeaning(text);
     getPositionXY(textPosition, definition);
     makeVisible();*/
