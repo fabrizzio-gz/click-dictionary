@@ -3,6 +3,42 @@ let visible = false;
 const defW = 250; //px
 const defH = 220; //px
 
+class Definition {
+  constructor() {
+    this.definition = document.createElement("div");
+    this.closeButton = document.createElement("span");
+    this.dictWord = document.createElement("h2");
+    this.dictMeaning = document.createElement("p");
+    const buttonText = document.createTextNode("&times;");
+    this.closeButton.appendChild(buttonText);
+    const wordTitle = document.createTextNode("Test word");
+    this.dictWord.appendChild(wordTitle);
+    /*
+    this.closeButton.appendChild(buttonText);
+    this.dictWord.createTextNode("Test word");
+    this.dictMeaning.createTextNode("This is the definition");
+    // .createTextNode("Tutorix is the best e-learning platform");
+*/
+    this.definition.appendChild(this.closeButton);
+    this.definition.appendChild(this.dictWord);
+    this.definition.appendChild(this.dictMeaning);
+    console.log("creating");
+  }
+
+  add() {
+    console.log("adding");
+    document.body.appendChild(this.definition);
+  }
+
+  remove() {
+    this.definition.remove();
+  }
+}
+
+const definitionObj = new Definition();
+definitionObj.add();
+
+/*
 const toggleVisibility = () => {
   if (visible) definition.style.setProperty("--modal-visibility", "hidden");
   else definition.style.setProperty("--modal-visibility", "visible");
@@ -70,3 +106,4 @@ document.addEventListener("dblclick", async function myfunction() {
 
 const closeButton = document.getElementById("close-button");
 closeButton.addEventListener("click", toggleVisibility);
+*/
