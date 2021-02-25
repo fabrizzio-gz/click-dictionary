@@ -1,5 +1,7 @@
 const definition = document.getElementById("dict-definition");
 let visible = false;
+const defW = 250; //px
+const defH = 220; //px
 
 async function getMeaning(wordSearched) {
   let response = await fetch(
@@ -34,16 +36,35 @@ const makeVisible = () => {
   visible = true;
 };
 
+const getPositionXY = (textPosition, element) => {
+  const { top, right, bottom, left } = textPosition;
+  const vw = document.documentElement.clientWidth;
+  const vh = document.documentElement.clientHeight;
+  console.log("Sizes: ", vw, vh);
+  element.style.setProperty(
+    "--position-left",
+    right + defW < vw ? right : left - defW
+  );
+  element.style.setProperty(
+    "--position-top",
+    bottom + defH < vh ? bottom : top - element.offsetHeight
+  );
+  /* if (right + defW < vw) element.style.setProperty("--position-right", right);
+  else element.style.setProperty("--position-right", left - defW);*/
+};
+
 document.addEventListener("dblclick", async function myfunction() {
   let text = window.getSelection();
   let textPosition = text.getRangeAt(0).getBoundingClientRect();
+  console.log(textPosition);
   let { bottom, right } = textPosition;
   bottom = Math.round(bottom);
   right = Math.round(right);
   // console.log("Positions are", bottom, right);
   await getMeaning(text.toString());
-  definition.style.setProperty("--position-x", right);
-  definition.style.setProperty("--position-y", bottom);
+  // definition.style.setProperty("--position-left", right);
+  getPositionXY(textPosition, definition);
+  // definition.style.setProperty("--position-top", bottom);
   makeVisible();
 });
 

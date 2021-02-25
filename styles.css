@@ -1,19 +1,20 @@
 :root {
   --modal-visibility: hidden;
-  --position-x: 0;
-  --position-y: 0;
+  --position-left: 0;
+  --position-top: 0;
 }
 
 .dict-definition {
   position: absolute;
+  box-sizing: border-box;
   width: 250px;
   max-height: 220px;
   overflow: scroll;
   border: solid black;
   border-radius: 0.25rem;
   padding: 0.5rem;
-  top: calc(var(--position-y) * 1px);
-  left: calc(var(--position-x) * 1px);
+  top: calc(var(--position-top) * 1px);
+  left: calc(var(--position-left) * 1px);
   background-color: rgb(255, 255, 255);
   visibility: var(--modal-visibility);
 }
