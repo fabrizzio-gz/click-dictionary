@@ -1,3 +1,6 @@
+const definition = document.getElementById("dict-definition");
+let visible = false;
+
 async function getMeaning(wordSearched) {
   let response = await fetch(
     `https://api.dictionaryapi.dev/api/v2/entries/en_US/${wordSearched}`
@@ -19,8 +22,16 @@ async function getMeaning(wordSearched) {
   console.log(definitions[0].definition);
 }
 
-const toggleVisibility = (elem) => {
-  elem.style.setProperty("--modal-visibility", "visible");
+const toggleVisibility = () => {
+  if (visible) definition.style.setProperty("--modal-visibility", "hidden");
+  else definition.style.setProperty("--modal-visibility", "visible");
+
+  visible = !visible;
+};
+
+const makeVisible = () => {
+  definition.style.setProperty("--modal-visibility", "visible");
+  visible = true;
 };
 
 document.addEventListener("dblclick", async function myfunction() {
@@ -31,8 +42,10 @@ document.addEventListener("dblclick", async function myfunction() {
   right = Math.round(right);
   // console.log("Positions are", bottom, right);
   await getMeaning(text.toString());
-  const definition = document.getElementById("dict-definition");
   definition.style.setProperty("--position-x", right);
   definition.style.setProperty("--position-y", bottom);
-  toggleVisibility(definition);
+  makeVisible();
 });
+
+const closeButton = document.getElementById("close-button");
+closeButton.addEventListener("click", toggleVisibility);
