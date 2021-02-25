@@ -3,27 +3,6 @@ let visible = false;
 const defW = 250; //px
 const defH = 220; //px
 
-async function getMeaning(wordSearched) {
-  let response = await fetch(
-    `https://api.dictionaryapi.dev/api/v2/entries/en_US/${wordSearched}`
-  );
-  // .then((response) => response.json())
-  // .then((data) => console.log(data));
-  let body = await response.json();
-  body = body[0];
-  let { word, meanings } = body;
-  console.log(word);
-  let meaning = meanings[0];
-  let { partOfSpeech, definitions } = meaning;
-
-  document.getElementById("dictWord").textContent = word;
-  document.getElementById("dictMeaning").textContent =
-    definitions[0].definition;
-
-  console.log(partOfSpeech);
-  console.log(definitions[0].definition);
-}
-
 const toggleVisibility = () => {
   if (visible) definition.style.setProperty("--modal-visibility", "hidden");
   else definition.style.setProperty("--modal-visibility", "visible");
@@ -41,6 +20,7 @@ const getPositionXY = (textPosition, element) => {
   const vw = document.documentElement.clientWidth;
   const vh = document.documentElement.clientHeight;
   console.log("Sizes: ", vw, vh);
+
   element.style.setProperty(
     "--position-left",
     right + defW < vw ? right : left - defW
@@ -49,23 +29,43 @@ const getPositionXY = (textPosition, element) => {
     "--position-top",
     bottom + defH < vh ? bottom : top - element.offsetHeight
   );
-  /* if (right + defW < vw) element.style.setProperty("--position-right", right);
-  else element.style.setProperty("--position-right", left - defW);*/
 };
+
+async function getMeaning(wordSearched) {
+  try {
+    let response = await fetch(
+      `https://api.dictionaryapi.dev/api/v2/entries/en_US/${wordSearched}`
+    );
+    let body = await response.json();
+    body = body[0];
+    let { word, meanings } = body;
+    console.log(word);
+    let meaning = meanings[0];
+    let { partOfSpeech, definitions } = meaning;
+
+    document.getElementById("dictWord").textContent = word;
+    document.getElementById("dictMeaning").textContent =
+      definitions[0].definition;
+    console.log(partOfSpeech);
+    console.log(definitions[0].definition);
+  } catch (error) {
+    document.getElementById("dictWord").textContent = wordSearched;
+    document.getElementById("dictMeaning").textContent =
+      "No definitions found.";
+  }
+}
 
 document.addEventListener("dblclick", async function myfunction() {
   let text = window.getSelection();
   let textPosition = text.getRangeAt(0).getBoundingClientRect();
   console.log(textPosition);
-  let { bottom, right } = textPosition;
-  bottom = Math.round(bottom);
-  right = Math.round(right);
-  // console.log("Positions are", bottom, right);
-  await getMeaning(text.toString());
-  // definition.style.setProperty("--position-left", right);
-  getPositionXY(textPosition, definition);
-  // definition.style.setProperty("--position-top", bottom);
-  makeVisible();
+
+  text = text.toString();
+  if (text) {
+    await getMeaning(text);
+    getPositionXY(textPosition, definition);
+    makeVisible();
+  }
 });
 
 const closeButton = document.getElementById("close-button");
