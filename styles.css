@@ -4,10 +4,14 @@
   --position-y: 0;
 }
 
-#dictDefinition {
+.dict-definition {
   position: absolute;
   top: calc(var(--position-y) * 1px);
   left: calc(var(--position-x) * 1px);
   background-color: rgb(255, 255, 255);
   visibility: var(--modal-visibility);
+}
+
+.show-definition {
+  visibility: visible;
 }
