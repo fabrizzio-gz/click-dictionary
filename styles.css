@@ -6,6 +6,10 @@
 
 .dict-definition {
   position: absolute;
+  width: 250px;
+  border: solid black;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
   top: calc(var(--position-y) * 1px);
   left: calc(var(--position-x) * 1px);
   background-color: rgb(255, 255, 255);
@@ -14,4 +18,18 @@
 
 .show-definition {
   visibility: visible;
+}
+
+.close-button {
+  float: right;
+  width: 1.5rem;
+  line-height: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+.close-button:hover {
+  background-color: black;
+  color: white;
 }

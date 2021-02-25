@@ -11,7 +11,7 @@ async function getMeaning(wordSearched) {
   let meaning = meanings[0];
   let { partOfSpeech, definitions } = meaning;
 
-  document.getElementById("dictWord").textContent = wordSearched;
+  document.getElementById("dictWord").textContent = word;
   document.getElementById("dictMeaning").textContent =
     definitions[0].definition;
 
