@@ -7,6 +7,8 @@
 .dict-definition {
   position: absolute;
   width: 250px;
+  max-height: 220px;
+  overflow: scroll;
   border: solid black;
   border-radius: 0.25rem;
   padding: 0.5rem;
