@@ -125,7 +125,7 @@ class Definition {
       (right + Definition.defW < vw ? right : left - Definition.defW) + "px";
 
     if (bottom + Definition.defH < vh)
-      this.definition.style.top = bottom + "px";
+      this.definition.style.top = window.scrollY + bottom + "px";
     else this.definition.style.bottom = vh - top + "px";
   }
 
@@ -163,4 +163,8 @@ document.onkeydown = (event) => {
     // value == this.definition
     Definition.activeDefinitions.forEach((value) => value.remove());
   }
+};
+
+window.onscroll = (event) => {
+  Definition.activeDefinitions.forEach((value) => value.remove());
 };
