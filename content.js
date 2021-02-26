@@ -126,7 +126,7 @@ class Definition {
 
     if (bottom + Definition.defH < vh)
       this.definition.style.top = window.scrollY + bottom + "px";
-    else this.definition.style.bottom = vh - top + "px";
+    else this.definition.style.bottom = vh - top - window.scrollY + "px";
   }
 
   add() {
