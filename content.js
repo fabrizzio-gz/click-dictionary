@@ -1,10 +1,10 @@
-console.log("Execution");
-const style = document.createElement("style");
-style.id = "dict-style";
-style.insertAdjacentHTML(
-  "afterbegin",
-  `
-#dict-background {
+const addStyle = () => {
+  const style = document.createElement("style");
+  style.id = "dict-style";
+  style.insertAdjacentHTML(
+    "afterbegin",
+    `
+.dict-background {
   position: fixed;
   left: 0;
   top: 0;
@@ -39,8 +39,11 @@ style.insertAdjacentHTML(
   color: white;
 }
 `
-);
-document.head.appendChild(style);
+  );
+  document.head.appendChild(style);
+};
+
+addStyle();
 
 class Definition {
   static defW = 250; //px
@@ -50,7 +53,7 @@ class Definition {
 
   constructor(wordSearched) {
     this.id = Definition.defCount++;
-    console.log(this.id);
+    // console.log(this.id);
 
     /* Background is used to detect clicks out
      * of the definition box.
@@ -59,9 +62,10 @@ class Definition {
      * them in order. */
     document.body.insertAdjacentHTML(
       "afterbegin",
-      "<div id=dict-background><div>"
+      `<div id=dict-background-${this.id}><div>`
     );
-    this.background = document.getElementById("dict-background");
+    this.background = document.getElementById(`dict-background-${this.id}`);
+    this.background.classList.add("dict-background");
     this.background.style.zIndex = Definition.defCount.toString();
     this.background.addEventListener("click", () => this.remove());
 
@@ -90,7 +94,7 @@ class Definition {
       let body = await response.json();
       body = body[0];
       let { word, meanings } = body;
-      console.log(word);
+      // console.log(word);
       let meaning = meanings[0];
       let { partOfSpeech, definitions } = meaning;
 
@@ -98,9 +102,10 @@ class Definition {
       this.dictMeaning.appendChild(
         document.createTextNode(definitions[0].definition)
       );
-      console.log(partOfSpeech);
-      console.log(definitions[0].definition);
+      // console.log(partOfSpeech);
+      // console.log(definitions[0].definition);
     } catch (error) {
+      // console.log(error);
       this.dictWord.appendChild(document.createTextNode(wordSearched));
       this.dictMeaning.appendChild(
         document.createTextNode("No definitions found.")
@@ -110,11 +115,11 @@ class Definition {
 
   setPosition(textPosition) {
     const { top, right, bottom, left } = textPosition;
-    console.log("bottom: ", bottom);
-    console.log("top: ", top);
+    // console.log("bottom: ", bottom);
+    // console.log("top: ", top);
     const vw = document.documentElement.clientWidth;
     const vh = document.documentElement.clientHeight;
-    // console.log("Sizes: ", vw, vh);
+    // // console.log("Sizes: ", vw, vh);
 
     this.definition.style.left =
       (right + Definition.defW < vw ? right : left - Definition.defW) + "px";
@@ -125,13 +130,13 @@ class Definition {
   }
 
   add() {
-    // console.log("adding");
+    // // console.log("adding");
     Definition.activeDefinitions.set(this.id, this.definition);
     document.body.appendChild(this.definition);
   }
 
   remove() {
-    // console.log("removing");
+    // // console.log("removing");
     Definition.activeDefinitions.delete(this.id);
     this.definition.remove();
     this.background.remove();
@@ -139,11 +144,12 @@ class Definition {
 }
 
 document.addEventListener("dblclick", async () => {
+  // debugger;
   const text = window.getSelection();
   const textString = text.toString();
   if (textString) {
     const textPosition = text.getRangeAt(0).getBoundingClientRect();
-    console.log(textPosition);
+    // console.log(textPosition);
     const definition = new Definition(textString);
     await definition.writeDefinitionContent(textString);
     definition.setPosition(textPosition);
@@ -153,7 +159,7 @@ document.addEventListener("dblclick", async () => {
 
 document.onkeydown = (event) => {
   if (event.keyCode == 27) {
-    console.log("Pressed ESC");
+    // console.log("Pressed ESC");
     // value == this.definition
     Definition.activeDefinitions.forEach((value) => value.remove());
   }

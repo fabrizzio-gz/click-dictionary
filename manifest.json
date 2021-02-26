@@ -5,6 +5,9 @@
   "version": "1.0",
 
   "description": "Get word definition when double clicking on it.",
+  "permissions": [
+    "*://api.dictionaryapi.dev/api/*"
+  ],
 
   "content_scripts": [
     {
