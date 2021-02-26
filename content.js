@@ -1,10 +1,3 @@
-// const definition = document.getElementById("dict-definition");
-let visible = false;
-/*
-const defW = 250; //px
-const defH = 220; //px
-*/
-
 class Definition {
   static defW = 250; //px
   static defH = 220; //px
@@ -15,8 +8,17 @@ class Definition {
     this.id = Definition.defCount++;
     console.log(this.id);
 
+    document.body.insertAdjacentHTML(
+      "afterbegin",
+      "<div id=dict-background><div>"
+    );
+    this.background = document.getElementById("dict-background");
+    this.background.style.zIndex = Definition.defCount.toString();
+    this.background.addEventListener("click", () => this.remove());
+
     this.definition = document.createElement("div");
     this.definition.classList.add("dict-definition");
+    this.definition.style.zIndex = Definition.defCount.toString();
 
     this.closeButton = document.createElement("span");
     this.closeButton.classList.add("close-button");
@@ -43,19 +45,14 @@ class Definition {
       let meaning = meanings[0];
       let { partOfSpeech, definitions } = meaning;
 
-      // document.getElementById("dictWord").textContent = word;
       this.dictWord.appendChild(document.createTextNode(word));
-      // document.getElementById("dictMeaning").textContent =
-      //  definitions[0].definition;
       this.dictMeaning.appendChild(
         document.createTextNode(definitions[0].definition)
       );
       console.log(partOfSpeech);
       console.log(definitions[0].definition);
     } catch (error) {
-      // document.getElementById("dictWord").textContent = wordSearched;
       this.dictWord.appendChild(document.createTextNode(wordSearched));
-      // document.getElementById("dictMeaning").textContent = "No definitions found.";
       this.dictMeaning.appendChild(
         document.createTextNode("No definitions found.")
       );
@@ -88,21 +85,28 @@ class Definition {
     console.log("removing");
     Definition.activeDefinitions.delete(this.id);
     this.definition.remove();
+    this.background.remove();
   }
 }
 
 document.addEventListener("dblclick", async function myfunction() {
-  let text = window.getSelection();
-
-  if (text.toString()) {
+  const text = window.getSelection();
+  const textString = text.toString();
+  if (textString) {
     const textPosition = text.getRangeAt(0).getBoundingClientRect();
-    text = text.toString();
     console.log(textPosition);
-    const definition = new Definition(text);
-    await definition.writeDefinitionContent(text);
+    const definition = new Definition(textString);
+    await definition.writeDefinitionContent(textString);
     definition.setPosition(textPosition);
     definition.add();
   }
 });
 
-document.addEventListener("click", () => console.log("click"));
+const closeModals = (event) => {
+  console.log("Hi");
+  if (event.target === background) {
+    console.log("background!!");
+  }
+};
+
+// document.addEventListener("click", closeModals);
