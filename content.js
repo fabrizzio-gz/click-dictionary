@@ -8,6 +8,11 @@ class Definition {
     this.id = Definition.defCount++;
     console.log(this.id);
 
+    /* Background is used to detect clicks out
+     * of the definition box.
+     * z-index is set to click the most recent
+     * definition background first and close
+     * them in order. */
     document.body.insertAdjacentHTML(
       "afterbegin",
       "<div id=dict-background><div>"
