@@ -1,3 +1,47 @@
+console.log("Execution");
+const style = document.createElement("style");
+style.id = "dict-style";
+style.insertAdjacentHTML(
+  "afterbegin",
+  `
+#dict-background {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.dict-definition {
+  position: absolute;
+  box-sizing: border-box;
+  width: 250px;
+  max-height: 220px;
+  overflow: scroll;
+  border: solid black;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  background-color: rgb(255, 255, 255);
+}
+
+.close-button {
+  float: right;
+  width: 1.5rem;
+  line-height: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+.close-button:hover {
+  background-color: black;
+  color: white;
+}
+`
+);
+document.head.appendChild(style);
+
 class Definition {
   static defW = 250; //px
   static defH = 220; //px
@@ -6,7 +50,7 @@ class Definition {
 
   constructor(wordSearched) {
     this.id = Definition.defCount++;
-    // console.log(this.id);
+    console.log(this.id);
 
     /* Background is used to detect clicks out
      * of the definition box.
@@ -46,7 +90,7 @@ class Definition {
       let body = await response.json();
       body = body[0];
       let { word, meanings } = body;
-      // console.log(word);
+      console.log(word);
       let meaning = meanings[0];
       let { partOfSpeech, definitions } = meaning;
 
@@ -54,8 +98,8 @@ class Definition {
       this.dictMeaning.appendChild(
         document.createTextNode(definitions[0].definition)
       );
-      // console.log(partOfSpeech);
-      // console.log(definitions[0].definition);
+      console.log(partOfSpeech);
+      console.log(definitions[0].definition);
     } catch (error) {
       this.dictWord.appendChild(document.createTextNode(wordSearched));
       this.dictMeaning.appendChild(
@@ -66,11 +110,11 @@ class Definition {
 
   setPosition(textPosition) {
     const { top, right, bottom, left } = textPosition;
-    // console.log("bottom: ", bottom);
-    // console.log("top: ", top);
+    console.log("bottom: ", bottom);
+    console.log("top: ", top);
     const vw = document.documentElement.clientWidth;
     const vh = document.documentElement.clientHeight;
-    // // console.log("Sizes: ", vw, vh);
+    // console.log("Sizes: ", vw, vh);
 
     this.definition.style.left =
       (right + Definition.defW < vw ? right : left - Definition.defW) + "px";
@@ -81,13 +125,13 @@ class Definition {
   }
 
   add() {
-    // // console.log("adding");
+    // console.log("adding");
     Definition.activeDefinitions.set(this.id, this.definition);
     document.body.appendChild(this.definition);
   }
 
   remove() {
-    // // console.log("removing");
+    // console.log("removing");
     Definition.activeDefinitions.delete(this.id);
     this.definition.remove();
     this.background.remove();
@@ -99,7 +143,7 @@ document.addEventListener("dblclick", async () => {
   const textString = text.toString();
   if (textString) {
     const textPosition = text.getRangeAt(0).getBoundingClientRect();
-    // console.log(textPosition);
+    console.log(textPosition);
     const definition = new Definition(textString);
     await definition.writeDefinitionContent(textString);
     definition.setPosition(textPosition);
@@ -109,7 +153,7 @@ document.addEventListener("dblclick", async () => {
 
 document.onkeydown = (event) => {
   if (event.keyCode == 27) {
-    // console.log("Pressed ESC");
+    console.log("Pressed ESC");
     // value == this.definition
     Definition.activeDefinitions.forEach((value) => value.remove());
   }
