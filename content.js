@@ -8,8 +8,13 @@ const defH = 220; //px
 class Definition {
   static defW = 250; //px
   static defH = 220; //px
+  static defCount = 0;
+  static activeDefinitions = new Map();
 
   constructor(wordSearched) {
+    this.id = Definition.defCount++;
+    console.log(this.id);
+
     this.definition = document.createElement("div");
     this.definition.classList.add("dict-definition");
 
@@ -75,11 +80,13 @@ class Definition {
 
   add() {
     console.log("adding");
+    Definition.activeDefinitions.set(this.id, this.definition);
     document.body.appendChild(this.definition);
   }
 
   remove() {
     console.log("removing");
+    Definition.activeDefinitions.delete(this.id);
     this.definition.remove();
   }
 }
@@ -97,3 +104,5 @@ document.addEventListener("dblclick", async function myfunction() {
     definition.add();
   }
 });
+
+document.addEventListener("click", () => console.log("click"));
