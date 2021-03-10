@@ -17,7 +17,7 @@ const addStyle = () => {
   position: absolute;
   box-sizing: border-box;
   width: 300px;
-  max-height: 220px;
+  max-height: 350px;
   overflow: scroll;
   border: solid black;
   border-radius: 0.25rem;
@@ -62,7 +62,7 @@ addStyle();
 
 class Definition {
   static defW = 300; //px
-  static defH = 220; //px
+  static defH = 350; //px
   static defCount = 0;
   static activeDefinitions = new Map();
 
