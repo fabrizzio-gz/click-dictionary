@@ -1,3 +1,6 @@
+const defW = 300;
+const defH = 350;
+
 const addStyle = () => {
   const style = document.createElement("style");
   style.id = "dict-style";
@@ -16,8 +19,8 @@ const addStyle = () => {
 .dict-definition {
   position: absolute;
   box-sizing: border-box;
-  width: 300px;
-  max-height: 350px;
+  width: ${defW.toString()}px;
+  max-height: ${defH.toString()}px;
   overflow: scroll;
   border: solid black;
   border-radius: 0.25rem;
@@ -61,8 +64,6 @@ const addStyle = () => {
 addStyle();
 
 class Definition {
-  static defW = 300; //px
-  static defH = 350; //px
   static defCount = 0;
   static activeDefinitions = new Map();
 
@@ -186,9 +187,9 @@ class Definition {
     const vh = document.documentElement.clientHeight;
 
     this.definition.style.left =
-      (right + Definition.defW < vw ? right : left - Definition.defW) + "px";
+      (right + defW < vw ? right : left - defW) + "px";
 
-    if (bottom + Definition.defH < vh)
+    if (bottom + defH < vh)
       this.definition.style.top = window.scrollY + bottom + "px";
     else this.definition.style.bottom = vh - top - window.scrollY + "px";
   }
