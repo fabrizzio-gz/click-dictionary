@@ -25,6 +25,10 @@ const addStyle = () => {
   background-color: rgb(255, 255, 255);
 }
 
+.dict-definition ol {
+  margin-left: 1.5em;
+}
+
 .dict-speech-part {
   color: #404040;
   font-style: italic;
@@ -121,7 +125,6 @@ class Definition {
       let { word, meanings } = body;
       this.dictWord.appendChild(document.createTextNode(word));
       this.meanings = meanings;
-      console.log(this.meanings);
       this.index = 0;
       this.addArrows(this.index);
       this.writeMeaning(this.index);
@@ -159,9 +162,24 @@ class Definition {
     this.dictSpeechPart.appendChild(
       document.createTextNode("(" + partOfSpeech + ")")
     );
-    this.dictMeaning.appendChild(
-      document.createTextNode(definitions[0].definition)
-    );
+
+    if (definitions.length == 1)
+      this.dictMeaning.appendChild(
+        document.createTextNode(definitions[0].definition)
+      );
+    else {
+      // Each element of definitions is an object
+      // with definition and example properties
+      const definitionsHTML = document.createElement("ol");
+      definitions.forEach((defObj) =>
+        definitionsHTML.insertAdjacentHTML(
+          "beforeend",
+          `<li>${defObj.definition}</li>`
+        )
+      );
+      console.log(definitionsHTML);
+      this.dictMeaning.appendChild(definitionsHTML);
+    }
   }
 
   setPosition(textPosition) {
