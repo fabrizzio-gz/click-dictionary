@@ -16,13 +16,18 @@ const addStyle = () => {
 .dict-definition {
   position: absolute;
   box-sizing: border-box;
-  width: 250px;
+  width: 300px;
   max-height: 220px;
   overflow: scroll;
   border: solid black;
   border-radius: 0.25rem;
   padding: 0.5rem;
   background-color: rgb(255, 255, 255);
+}
+
+.dict-speech-part {
+  color: #404040;
+  font-style: italic;
 }
 
 .close-button {
@@ -46,7 +51,7 @@ const addStyle = () => {
 addStyle();
 
 class Definition {
-  static defW = 250; //px
+  static defW = 300; //px
   static defH = 220; //px
   static defCount = 0;
   static activeDefinitions = new Map();
@@ -79,10 +84,13 @@ class Definition {
     this.closeButton.addEventListener("click", () => this.remove());
 
     this.dictWord = document.createElement("h2");
+    this.dictSpeechPart = document.createElement("span");
+    this.dictSpeechPart.classList.add("dict-speech-part");
     this.dictMeaning = document.createElement("p");
 
     this.definition.appendChild(this.closeButton);
     this.definition.appendChild(this.dictWord);
+    this.definition.appendChild(this.dictSpeechPart);
     this.definition.appendChild(this.dictMeaning);
   }
 
@@ -99,6 +107,9 @@ class Definition {
       let { partOfSpeech, definitions } = meaning;
 
       this.dictWord.appendChild(document.createTextNode(word));
+      this.dictSpeechPart.appendChild(
+        document.createTextNode("(" + partOfSpeech + ")")
+      );
       this.dictMeaning.appendChild(
         document.createTextNode(definitions[0].definition)
       );
