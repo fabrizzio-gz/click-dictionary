@@ -30,6 +30,7 @@ const addStyle = () => {
   font-style: italic;
 }
 
+.direction-button,
 .close-button {
   float: right;
   width: 1.5rem;
@@ -39,6 +40,7 @@ const addStyle = () => {
   border-radius: 0.25rem;
 }
 
+.direction-button:hover,
 .close-button:hover {
   background-color: black;
   color: white;
@@ -88,6 +90,11 @@ class Definition {
     this.dictSpeechPart.classList.add("dict-speech-part");
     this.dictMeaning = document.createElement("p");
 
+    this.rightButton = document.createElement("span");
+    this.rightButton.classList.add("direction-button");
+    this.rightButton.insertAdjacentHTML("afterbegin", ">");
+    this.rightButton.addEventListener("click", () => this.nextDefinition());
+
     this.definition.appendChild(this.closeButton);
     this.definition.appendChild(this.dictWord);
     this.definition.appendChild(this.dictSpeechPart);
@@ -102,26 +109,43 @@ class Definition {
       let body = await response.json();
       body = body[0];
       let { word, meanings } = body;
-      // console.log(word);
-      let meaning = meanings[0];
-      let { partOfSpeech, definitions } = meaning;
-
       this.dictWord.appendChild(document.createTextNode(word));
-      this.dictSpeechPart.appendChild(
-        document.createTextNode("(" + partOfSpeech + ")")
-      );
-      this.dictMeaning.appendChild(
-        document.createTextNode(definitions[0].definition)
-      );
-      // console.log(partOfSpeech);
-      // console.log(definitions[0].definition);
+      this.meanings = meanings;
+      console.log(this.meanings);
+      this.index = 0;
+      this.addArrows(this.index);
+      this.writeMeaning(this.index);
     } catch (error) {
-      // console.log(error);
       this.dictWord.appendChild(document.createTextNode(wordSearched));
       this.dictMeaning.appendChild(
         document.createTextNode("No definitions found.")
       );
     }
+  }
+
+  addArrows(index) {
+    console.log(index);
+    if (this.meanings.length > 1 && index < this.meanings.length - 1) {
+      this.definition.appendChild(this.rightButton);
+    } else if (index > 0) this.definition.removeChild(this.rightButton);
+  }
+
+  writeMeaning(index) {
+    let meaning = this.meanings[index];
+    let { partOfSpeech, definitions } = meaning;
+
+    // Remove previous contents, if any
+    if (this.dictSpeechPart.firstChild)
+      this.dictSpeechPart.removeChild(this.dictSpeechPart.firstChild);
+    if (this.dictMeaning.firstChild)
+      this.dictMeaning.removeChild(this.dictMeaning.firstChild);
+
+    this.dictSpeechPart.appendChild(
+      document.createTextNode("(" + partOfSpeech + ")")
+    );
+    this.dictMeaning.appendChild(
+      document.createTextNode(definitions[0].definition)
+    );
   }
 
   setPosition(textPosition) {
@@ -138,6 +162,12 @@ class Definition {
     if (bottom + Definition.defH < vh)
       this.definition.style.top = window.scrollY + bottom + "px";
     else this.definition.style.bottom = vh - top - window.scrollY + "px";
+  }
+
+  nextDefinition() {
+    this.index = Math.min(this.index + 1, this.meanings.length - 1);
+    this.addArrows(this.index);
+    this.writeMeaning(this.index);
   }
 
   add() {
