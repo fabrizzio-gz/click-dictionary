@@ -68,7 +68,6 @@ class Definition {
 
   constructor(wordSearched) {
     this.id = Definition.defCount++;
-    // console.log(this.id);
 
     /* Background is used to detect clicks out
      * of the definition box.
@@ -177,18 +176,14 @@ class Definition {
           `<li>${defObj.definition}</li>`
         )
       );
-      console.log(definitionsHTML);
       this.dictMeaning.appendChild(definitionsHTML);
     }
   }
 
   setPosition(textPosition) {
     const { top, right, bottom, left } = textPosition;
-    // console.log("bottom: ", bottom);
-    // console.log("top: ", top);
     const vw = document.documentElement.clientWidth;
     const vh = document.documentElement.clientHeight;
-    // // console.log("Sizes: ", vw, vh);
 
     this.definition.style.left =
       (right + Definition.defW < vw ? right : left - Definition.defW) + "px";
@@ -211,13 +206,11 @@ class Definition {
   }
 
   add() {
-    // // console.log("adding");
     Definition.activeDefinitions.set(this.id, this.definition);
     document.body.appendChild(this.definition);
   }
 
   remove() {
-    // // console.log("removing");
     Definition.activeDefinitions.delete(this.id);
     this.definition.remove();
     this.background.remove();
@@ -225,12 +218,10 @@ class Definition {
 }
 
 document.addEventListener("dblclick", async () => {
-  // debugger;
   const text = window.getSelection();
   const textString = text.toString();
   if (textString) {
     const textPosition = text.getRangeAt(0).getBoundingClientRect();
-    // console.log(textPosition);
     const definition = new Definition(textString);
     await definition.writeDefinitionContent(textString);
     definition.setPosition(textPosition);
@@ -239,11 +230,8 @@ document.addEventListener("dblclick", async () => {
 });
 
 document.onkeydown = (event) => {
-  if (event.keyCode == 27) {
-    // console.log("Pressed ESC");
-    // value == this.definition
+  if (event.keyCode == 27)
     Definition.activeDefinitions.forEach((value) => value.remove());
-  }
 };
 
 /* window.onscroll = (event) => {
