@@ -1,5 +1,7 @@
 const defW = 300;
 const defH = 350;
+let defCount = 0;
+const activeDefinitions = new Map();
 
 const addStyle = () => {
   const style = document.createElement("style");
@@ -64,11 +66,8 @@ const addStyle = () => {
 addStyle();
 
 class Definition {
-  static defCount = 0;
-  static activeDefinitions = new Map();
-
   constructor(wordSearched) {
-    this.id = Definition.defCount++;
+    this.id = defCount++;
 
     /* Background is used to detect clicks out
      * of the definition box.
@@ -81,12 +80,12 @@ class Definition {
     );
     this.background = document.getElementById(`dict-background-${this.id}`);
     this.background.classList.add("dict-background");
-    this.background.style.zIndex = Definition.defCount.toString();
+    this.background.style.zIndex = defCount.toString();
     this.background.addEventListener("click", () => this.remove());
 
     this.definition = document.createElement("div");
     this.definition.classList.add("dict-definition");
-    this.definition.style.zIndex = Definition.defCount.toString();
+    this.definition.style.zIndex = defCount.toString();
 
     this.closeButton = document.createElement("span");
     this.closeButton.classList.add("close-button");
@@ -207,12 +206,12 @@ class Definition {
   }
 
   add() {
-    Definition.activeDefinitions.set(this.id, this.definition);
+    activeDefinitions.set(this.id, this.definition);
     document.body.appendChild(this.definition);
   }
 
   remove() {
-    Definition.activeDefinitions.delete(this.id);
+    activeDefinitions.delete(this.id);
     this.definition.remove();
     this.background.remove();
   }
@@ -231,10 +230,9 @@ document.addEventListener("dblclick", async () => {
 });
 
 document.onkeydown = (event) => {
-  if (event.keyCode == 27)
-    Definition.activeDefinitions.forEach((value) => value.remove());
+  if (event.keyCode == 27) activeDefinitions.forEach((value) => value.remove());
 };
 
 /* window.onscroll = (event) => {
-  Definition.activeDefinitions.forEach((value) => value.remove());
+  activeDefinitions.forEach((value) => value.remove());
 }; */
