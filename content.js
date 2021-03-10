@@ -246,6 +246,6 @@ document.onkeydown = (event) => {
   }
 };
 
-window.onscroll = (event) => {
+/* window.onscroll = (event) => {
   Definition.activeDefinitions.forEach((value) => value.remove());
-};
+}; */
