@@ -40,6 +40,10 @@ const addStyle = () => {
   border-radius: 0.25rem;
 }
 
+.direction-button-left {
+  float: left;
+}
+
 .direction-button:hover,
 .close-button:hover {
   background-color: black;
@@ -95,6 +99,12 @@ class Definition {
     this.rightButton.insertAdjacentHTML("afterbegin", ">");
     this.rightButton.addEventListener("click", () => this.nextDefinition());
 
+    this.leftButton = document.createElement("span");
+    this.leftButton.classList.add("direction-button");
+    this.leftButton.classList.add("direction-button-left");
+    this.leftButton.insertAdjacentHTML("afterbegin", "<");
+    this.leftButton.addEventListener("click", () => this.previousDefinition());
+
     this.definition.appendChild(this.closeButton);
     this.definition.appendChild(this.dictWord);
     this.definition.appendChild(this.dictSpeechPart);
@@ -124,10 +134,16 @@ class Definition {
   }
 
   addArrows(index) {
-    console.log(index);
+    // Add left button
+    if (this.index > 0) this.definition.appendChild(this.leftButton);
+    else if (this.definition.contains(this.leftButton))
+      this.definition.removeChild(this.leftButton);
+
+    // Add right button
     if (this.meanings.length > 1 && index < this.meanings.length - 1) {
       this.definition.appendChild(this.rightButton);
-    } else if (index > 0) this.definition.removeChild(this.rightButton);
+    } else if (index > 0 && this.definition.contains(this.rightButton))
+      this.definition.removeChild(this.rightButton);
   }
 
   writeMeaning(index) {
@@ -166,6 +182,12 @@ class Definition {
 
   nextDefinition() {
     this.index = Math.min(this.index + 1, this.meanings.length - 1);
+    this.addArrows(this.index);
+    this.writeMeaning(this.index);
+  }
+
+  previousDefinition() {
+    this.index = Math.max(this.index - 1, 0);
     this.addArrows(this.index);
     this.writeMeaning(this.index);
   }
