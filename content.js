@@ -169,14 +169,13 @@ class Definition {
     else {
       // Each element of definitions is an object
       // with definition and example properties
-      const definitionsHTML = document.createElement("ol");
-      definitions.forEach((defObj) =>
-        definitionsHTML.insertAdjacentHTML(
-          "beforeend",
-          `<li>${defObj.definition}</li>`
-        )
-      );
-      this.dictMeaning.appendChild(definitionsHTML);
+      const definitionsList = document.createElement("ol");
+      definitions.forEach((defObj) => {
+        const newDef = document.createElement("li");
+        newDef.appendChild(document.createTextNode(defObj.definition));
+        definitionsList.appendChild(newDef);
+      });
+      this.dictMeaning.appendChild(definitionsList);
     }
   }
 
